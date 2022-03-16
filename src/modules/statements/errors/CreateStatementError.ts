@@ -1,4 +1,4 @@
-import { AppError } from "../../../../shared/errors/AppError";
+import { AppError } from '../../../shared/errors/AppError';
 
 export namespace CreateStatementError {
   export class UserNotFound extends AppError {
@@ -10,6 +10,12 @@ export namespace CreateStatementError {
   export class InsufficientFunds extends AppError {
     constructor() {
       super('Insufficient funds', 400);
+    }
+  }
+
+  export class CannotTransferToYourself extends AppError {
+    constructor() {
+      super('Can not transfer to yourself', 400);
     }
   }
 }

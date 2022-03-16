@@ -1,15 +1,15 @@
 import { validate } from "uuid";
 import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/InMemoryUsersRepository";
 import { IUsersRepository } from "../../../users/repositories/IUsersRepository";
-import { ICreateUserDTO } from "../../../users/useCases/createUser/ICreateUserDTO";
+import { ICreateUserDTO } from "../../../users/dtos/ICreateUserDTO";
 import { OperationType } from "../../enums/OperationType";
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository";
 import { IStatementsRepository } from "../../repositories/IStatementsRepository";
 import { CreateStatementUseCase } from "../createStatement/CreateStatementUseCase";
-import { ICreateStatementDTO } from "../createStatement/ICreateStatementDTO";
+import { ICreateStatementDTO } from "../../dtos/ICreateStatementDTO";
 import { GetStatementOperationUseCase } from "./GetStatementOperationUseCase";
 import { v4 as uuidV4 } from "uuid";
-import { GetStatementOperationError } from "./GetStatementOperationError";
+import { GetStatementOperationError } from "../../errors/GetStatementOperationError";
 
 let usersRepository: IUsersRepository;
 let statementsRepository: IStatementsRepository;

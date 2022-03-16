@@ -3,8 +3,8 @@ import { v4 as uuidV4, validate } from "uuid";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { CreateUserUseCase } from "../createUser/CreateUserUseCase";
-import { ICreateUserDTO } from "../createUser/ICreateUserDTO";
-import { ShowUserProfileError } from "./ShowUserProfileError";
+import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
+import { ShowUserProfileError } from "../../errors/ShowUserProfileError";
 import { ShowUserProfileUseCase } from "./ShowUserProfileUseCase";
 
 let showUserProfileUseCase: ShowUserProfileUseCase;

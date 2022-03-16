@@ -4,7 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
@@ -23,6 +23,10 @@ export class Statement {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
+  @ManyToOne(() => User, user => user.statementSends)
+  @JoinColumn({ name: 'sender_id' })
+  sender?: User;
+
   @Column()
   description: string;
 
@@ -37,6 +41,9 @@ export class Statement {
 
   @CreateDateColumn()
   updated_at: Date;
+
+  @Column('uuid')
+  sender_id?: string;
 
   constructor() {
     if (!this.id) {

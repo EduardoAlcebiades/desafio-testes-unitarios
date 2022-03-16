@@ -1,14 +1,15 @@
-import "reflect-metadata";
-import "express-async-errors";
-import "dotenv/config";
+import 'reflect-metadata';
+import 'express-async-errors';
+import 'dotenv/config';
 
-import express from "express";
-import cors from "cors";
+import express from 'express';
+import cors from 'cors';
 
-import { connect } from "./database";
-import "./shared/container";
-import { router } from "./routes";
-import { AppError } from "./shared/errors/AppError";
+import './shared/container';
+
+import { connect } from './database';
+import { router } from './routes';
+import { AppError } from './shared/errors/AppError';
 
 connect();
 
@@ -17,14 +18,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/v1", router);
+app.use('/api/v1', router);
 
 app.use(
   (
     err: Error,
     request: express.Request,
     response: express.Response,
-    _next: express.NextFunction
+    _next: express.NextFunction,
   ) => {
     if (err instanceof AppError) {
       return response.status(err.statusCode).json({
@@ -33,10 +34,10 @@ app.use(
     }
 
     return response.status(500).json({
-      status: "error",
+      status: 'error',
       message: `Internal server error - ${err.message} `,
     });
-  }
+  },
 );
 
 export { app };

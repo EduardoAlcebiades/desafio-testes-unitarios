@@ -1,9 +1,9 @@
-import { inject, injectable } from "tsyringe";
+import { inject, injectable } from 'tsyringe';
 
-import { IUsersRepository } from "../../../users/repositories/IUsersRepository";
-import { Statement } from "../../entities/Statement";
-import { IStatementsRepository } from "../../repositories/IStatementsRepository";
-import { GetBalanceError } from "./GetBalanceError";
+import { IUsersRepository } from '../../../users/repositories/IUsersRepository';
+import { Statement } from '../../entities/Statement';
+import { IStatementsRepository } from '../../repositories/IStatementsRepository';
+import { GetBalanceError } from '../../errors/GetBalanceError';
 
 interface IRequest {
   user_id: string;
@@ -11,6 +11,7 @@ interface IRequest {
 
 interface IResponse {
   statement: Statement[];
+  statementSends: Statement[];
   balance: number;
 }
 
@@ -27,13 +28,13 @@ export class GetBalanceUseCase {
   async execute({ user_id }: IRequest): Promise<IResponse> {
     const user = await this.usersRepository.findById(user_id);
 
-    if(!user) {
+    if (!user) {
       throw new GetBalanceError();
     }
 
     const balance = await this.statementsRepository.getUserBalance({
       user_id,
-      with_statement: true
+      with_statement: true,
     });
 
     return balance as IResponse;

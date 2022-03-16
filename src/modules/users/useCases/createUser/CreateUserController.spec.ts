@@ -3,7 +3,7 @@ import { Connection } from "typeorm";
 
 import { app } from "../../../../app";
 import { connect } from "../../../../database";
-import { ICreateUserDTO } from "./ICreateUserDTO";
+import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
 
 let connection: Connection;
 

@@ -1,10 +1,10 @@
-import { decode, sign } from "jsonwebtoken";
-import request from "supertest";
-import { Connection } from "typeorm";
+import { decode, sign } from 'jsonwebtoken';
+import request from 'supertest';
+import { Connection } from 'typeorm';
 
-import { app } from "../../../../app";
-import { connect } from "../../../../database";
-import { ICreateUserDTO } from "../../../users/useCases/createUser/ICreateUserDTO";
+import { app } from '../../../../app';
+import { connect } from '../../../../database';
+import { ICreateUserDTO } from '../../../users/dtos/ICreateUserDTO';
 
 interface IJWTPayload {
   sub: string;
@@ -22,21 +22,21 @@ let depositStatement: ICreateStatementRequestDTO;
 let withdrawStatement: ICreateStatementRequestDTO;
 
 const user: ICreateUserDTO = {
-  name: "Sample Name",
-  email: "sample@email.com",
-  password: "1234",
+  name: 'Sample Name',
+  email: 'sample@email.com',
+  password: '1234',
 };
 
-describe("Get Balance", () => {
+describe('Get Balance', () => {
   beforeAll(async () => {
     connection = await connect();
 
     await connection.dropDatabase();
     await connection.runMigrations();
 
-    await request(app).post("/api/v1/users").send(user);
+    await request(app).post('/api/v1/users').send(user);
 
-    const response = await request(app).post("/api/v1/sessions").send({
+    const response = await request(app).post('/api/v1/sessions').send({
       email: user.email,
       password: user.password,
     });
@@ -44,14 +44,14 @@ describe("Get Balance", () => {
     const decodedToken = decode(response.body.token) as IJWTPayload;
 
     token = response.body.token;
-    invalidToken = sign(decodedToken, "INVALIDSECRET");
+    invalidToken = sign(decodedToken, 'INVALIDSECRET');
     depositStatement = {
       amount: 100,
-      description: "Sample description",
+      description: 'Sample description',
     };
     withdrawStatement = {
       amount: 60,
-      description: "Sample description",
+      description: 'Sample description',
     };
   });
 
@@ -59,14 +59,14 @@ describe("Get Balance", () => {
     await connection.close();
   });
 
-  it("should be able to get balance account after a deposit", async () => {
+  it('should be able to get balance account after a deposit', async () => {
     await request(app)
-      .post("/api/v1/statements/deposit")
+      .post('/api/v1/statements/deposit')
       .send(depositStatement)
       .set({ Authorization: `Bearer ${token}` });
 
     const response = await request(app)
-      .get("/api/v1/statements/balance")
+      .get('/api/v1/statements/balance')
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(200);
@@ -74,14 +74,14 @@ describe("Get Balance", () => {
     expect(response.body.statement).toMatchObject([depositStatement]);
   });
 
-  it("should be able to get balance account after a withdraw", async () => {
+  it('should be able to get balance account after a withdraw', async () => {
     await request(app)
-      .post("/api/v1/statements/withdraw")
+      .post('/api/v1/statements/withdraw')
       .send(withdrawStatement)
       .set({ Authorization: `Bearer ${token}` });
 
     const response = await request(app)
-      .get("/api/v1/statements/balance")
+      .get('/api/v1/statements/balance')
       .set({ Authorization: `Bearer ${token}` });
 
     const totalBalance = depositStatement.amount - withdrawStatement.amount;
@@ -89,24 +89,24 @@ describe("Get Balance", () => {
     expect(response.status).toBe(200);
     expect(response.body.balance).toBe(totalBalance);
     expect(response.body.statement).toMatchObject([
-      depositStatement,
       withdrawStatement,
+      depositStatement,
     ]);
   });
 
-  it("should not be able to get balance accout when not authenticated", async () => {
-    const response = await request(app).get("/api/v1/statements/balance");
+  it('should not be able to get balance accout when not authenticated', async () => {
+    const response = await request(app).get('/api/v1/statements/balance');
 
     expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
+    expect(response.body).toHaveProperty('message');
   });
 
-  it("should not be able to get balance accout with a invalid token", async () => {
+  it('should not be able to get balance accout with a invalid token', async () => {
     const response = await request(app)
-      .get("/api/v1/statements/balance")
+      .get('/api/v1/statements/balance')
       .set({ Authorization: `Bearer ${invalidToken}` });
 
     expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
+    expect(response.body).toHaveProperty('message');
   });
 });

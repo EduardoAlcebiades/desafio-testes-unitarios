@@ -5,7 +5,7 @@ import { v4 as uuidV4, validate } from "uuid";
 
 import { app } from "../../../../app";
 import { connect } from "../../../../database";
-import { ICreateUserDTO } from "../../../users/useCases/createUser/ICreateUserDTO";
+import { ICreateUserDTO } from "../../../users/dtos/ICreateUserDTO";
 
 interface IJWTPayload {
   sub: string;

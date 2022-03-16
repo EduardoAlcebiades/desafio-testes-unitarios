@@ -1,30 +1,43 @@
+import { getRepository, Repository } from 'typeorm';
+
 import { Statement } from '../../entities/Statement';
 import { ICreateStatementDTO } from '../../dtos/ICreateStatementDTO';
 import { IGetBalanceDTO } from '../../dtos/IGetBalanceDTO';
 import { IGetStatementOperationDTO } from '../../dtos/IGetStatementOperationDTO';
 import { IStatementsRepository } from '../IStatementsRepository';
 
-export class InMemoryStatementsRepository implements IStatementsRepository {
-  private statements: Statement[] = [];
+export class StatementsRepository implements IStatementsRepository {
+  private repository: Repository<Statement>;
 
-  async create(data: ICreateStatementDTO): Promise<Statement> {
-    const statement = new Statement();
+  constructor() {
+    this.repository = getRepository(Statement);
+  }
 
-    Object.assign(statement, data);
+  async create({
+    user_id,
+    amount,
+    description,
+    type,
+    sender_id,
+  }: ICreateStatementDTO): Promise<Statement> {
+    const statement = this.repository.create({
+      user_id,
+      amount,
+      description,
+      type,
+      sender_id,
+    });
 
-    this.statements.push(statement);
-
-    return statement;
+    return await this.repository.save(statement);
   }
 
   async findStatementOperation({
     statement_id,
     user_id,
   }: IGetStatementOperationDTO): Promise<Statement | undefined> {
-    return this.statements.find(
-      operation =>
-        operation.id === statement_id && operation.user_id === user_id,
-    );
+    return this.repository.findOne(statement_id, {
+      where: { user_id },
+    });
   }
 
   async getUserBalance({
@@ -34,13 +47,15 @@ export class InMemoryStatementsRepository implements IStatementsRepository {
     | { balance: number }
     | { balance: number; statement: Statement[]; statementSends: Statement[] }
   > {
-    const statement = this.statements.filter(
-      operation => operation.user_id === user_id,
-    );
+    const statement = await this.repository.find({
+      where: { user_id },
+      relations: ['sender'],
+    });
 
-    const statementSends = this.statements.filter(
-      operation => operation.sender_id === user_id,
-    );
+    const statementSends = await this.repository.find({
+      where: { sender_id: user_id },
+      relations: ['user'],
+    });
 
     const balance = statement.reduce((acc, operation) => {
       if (operation.type === 'deposit' || operation.type === 'transfer') {

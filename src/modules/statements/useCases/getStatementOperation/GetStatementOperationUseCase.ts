@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import { IUsersRepository } from "../../../users/repositories/IUsersRepository";
 import { IStatementsRepository } from "../../repositories/IStatementsRepository";
-import { GetStatementOperationError } from "./GetStatementOperationError";
+import { GetStatementOperationError } from "../../errors/GetStatementOperationError";
 
 interface IRequest {
   user_id: string;

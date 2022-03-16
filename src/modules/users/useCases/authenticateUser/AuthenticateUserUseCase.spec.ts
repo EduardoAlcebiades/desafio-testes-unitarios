@@ -2,9 +2,9 @@ import { decode } from "jsonwebtoken";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { CreateUserUseCase } from "../createUser/CreateUserUseCase";
-import { ICreateUserDTO } from "../createUser/ICreateUserDTO";
+import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
 import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
-import { IncorrectEmailOrPasswordError } from "./IncorrectEmailOrPasswordError";
+import { IncorrectEmailOrPasswordError } from "../../errors/IncorrectEmailOrPasswordError";
 
 let usersRepository: IUsersRepository;
 let createUserUseCase: CreateUserUseCase;

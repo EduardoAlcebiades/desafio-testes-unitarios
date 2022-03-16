@@ -2,9 +2,9 @@ import { validate } from "uuid";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { CreateUserUseCase } from "./CreateUserUseCase";
-import { ICreateUserDTO } from "./ICreateUserDTO";
+import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
 import { compareSync } from "bcryptjs";
-import { CreateUserError } from "./CreateUserError";
+import { CreateUserError } from "../../errors/CreateUserError";
 
 let createUserUseCase: CreateUserUseCase;
 let usersRepository: IUsersRepository;

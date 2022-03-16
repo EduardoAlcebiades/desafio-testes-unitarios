@@ -1,14 +1,14 @@
 import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/InMemoryUsersRepository";
 import { IUsersRepository } from "../../../users/repositories/IUsersRepository";
-import { ICreateUserDTO } from "../../../users/useCases/createUser/ICreateUserDTO";
+import { ICreateUserDTO } from "../../../users/dtos/ICreateUserDTO";
 import { OperationType } from "../../enums/OperationType";
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository";
 import { IStatementsRepository } from "../../repositories/IStatementsRepository";
 import { CreateStatementUseCase } from "../createStatement/CreateStatementUseCase";
-import { ICreateStatementDTO } from "../createStatement/ICreateStatementDTO";
+import { ICreateStatementDTO } from "../../dtos/ICreateStatementDTO";
 import { GetBalanceUseCase } from "./GetBalanceUseCase";
 import { v4 as uuidV4 } from "uuid";
-import { GetBalanceError } from "./GetBalanceError";
+import { GetBalanceError } from "../../errors/GetBalanceError";
 
 let statementsRepository: IStatementsRepository;
 let usersRepository: IUsersRepository;
